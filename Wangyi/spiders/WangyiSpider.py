@@ -8,9 +8,9 @@ class WangyiSpider(BaseSpider):
     allowed_domains = ['news.163.com']
 
     start_urls = [
-            'http://news.163.com/16/0519/20/BNF3R3KV0001121M.html',
             'http://news.163.com/16/0519/18/BNEUC50S00011229.html',
-            'http://news.163.com/16/0519/18/BNEUC50S00011229.html',
+            'http://news.163.com/16/0519/23/BNFFU02C00014PRF.html',
+            'http://news.163.com/16/0520/02/BNFN6IC700014AED.html',
             ]
     def parse(self, response):
         item =  ArticleItem()
@@ -19,6 +19,7 @@ class WangyiSpider(BaseSpider):
             item['title'] = response.xpath('//h1/text()').extract()[0]
             paras = response.xpath('//div[@id="endText"]//p').extract()
             item['content'] = ''.join(paras)
+            item['raw'] = response.xpath('//div/[@id="endText"]//text()').extract()
             item['article_type'] = response.xpath('//div[@class="post_crumb"]//a/text()').extract()[2]
             item['author'] = response.xpath('//a[@id="ne_article_source"]/text()').extract()[0]
             item['source_link'] = response.xpath('//a[@id="ne_article_source"]/@href').extract()[0]

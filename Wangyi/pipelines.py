@@ -21,6 +21,9 @@ class MySQLStorePipeline(object):
     """
     @classmethod
     def from_crawler(cls, crawler):
+        import sys
+        reload(sys) # Python2.5 初始化后会删除 sys.setdefaultencoding 这个方法，我们需要重新载入 
+        sys.setdefaultencoding('utf-8')
         settings = crawler.settings
         dbargs = dict(
                 host = settings['MYSQL_HOST'],
@@ -41,9 +44,10 @@ class MySQLStorePipeline(object):
         self.cursor = self.conn.cursor()
 
     def process_item(self, item, spider):
+        print(type(item['title']))
         try:
-            sql = 'INSERT INTO "article_article" VALUES(null, "%s", "%s", "%s", "%s","%s", "%s");'% (item['title'], item['content'], item['author'], item['source_link'], item['publish_date'], item['url'])
-
+#            sql = 'INSERT INTO article_article VALUES(null, "%s", "%s", "%s", "%s", "%s", "%s");'%(item['title'].encode('utf-8'), item['content'].encode('utf-8'), item['author'].encode('utf-8'), item['source_link'].encode('utf-8'), item['publish_date'].encode('utf-8'), item['url'].encode('utf-8'))
+            sql = "INSERT INTO test VALUES(null, '%s', '%s', '%s', '%s');"%(item['title'].encode('utf-8'), item['author'].encode('utf-8'),item['content'].encode('utf-8'), item['url'].encode('utf-8'))
             self.cursor.execute(sql)
             self.conn.commit()
         except MySQLdb.Error, e:

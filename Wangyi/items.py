@@ -13,6 +13,7 @@ class ArticleItem(scrapy.Item):
     # name = scrapy.Field()
     title = scrapy.Field()
     content = scrapy.Field()
+    raw = scrapy.Field()
     source_name = scrapy.Field()
     source_link = scrapy.Field()
     article_type = scrapy.Field()
